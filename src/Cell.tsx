@@ -39,6 +39,7 @@ function Cell<R, SR>({
   onContextMenu,
   onRowChange,
   selectCell,
+  rangeSelectionMode,
   ...props
 }: CellRendererProps<R, SR>) {
   const { tabIndex, onFocus } = useRovingCellRef(isCellSelected);
@@ -89,6 +90,14 @@ function Cell<R, SR>({
     onRowChange(column, newRow);
   }
 
+  function onMouseDown(event: React.MouseEvent<HTMLDivElement>){
+    if(rangeSelectionMode){
+      selectCellWrapper(false);
+      const cellEvent = createCellEvent(event);
+      onClick && onClick({row, column, selectCell: selectCellWrapper}, cellEvent);
+    }
+  }
+
   return (
     <div
       role="gridcell"
@@ -103,6 +112,7 @@ function Cell<R, SR>({
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
       onFocus={onFocus}
+      onMouseDown={onMouseDown}
       {...props}
     >
       {!column.rowGroup && (

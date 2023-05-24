@@ -21,10 +21,11 @@ export const cell = css`
     overflow: clip;
     text-overflow: ellipsis;
     outline: none;
+    user-select:none;
 
     &[aria-selected='true'] {
-      outline: 2px solid var(--rdg-selection-color);
-      outline-offset: -2px;
+      outline: 1px solid var(--rdg-selection-color);
+      outline-offset: -1px;
     }
   }
 `;

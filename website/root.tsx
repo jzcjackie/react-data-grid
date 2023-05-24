@@ -25,6 +25,7 @@ import RowsReordering from './demos/RowsReordering';
 import ScrollToRow from './demos/ScrollToRow';
 import TreeView from './demos/TreeView';
 import VariableRowHeight from './demos/VariableRowHeight';
+import RangeSelection from "./demos/RangeSelection";
 
 const mainClassname = css`
   display: flex;
@@ -49,6 +50,7 @@ function Root() {
           <Route path="column-spanning" element={<ColumnSpanning direction={direction} />} />
           <Route path="columns-reordering" element={<ColumnsReordering direction={direction} />} />
           <Route path="context-menu" element={<ContextMenuDemo direction={direction} />} />
+          <Route path="range-selection" element={<RangeSelection direction={direction} />} />
           <Route
             path="customizable-renderers"
             element={<CustomizableRenderers direction={direction} />}

@@ -22,6 +22,8 @@ export type {
   FillEvent,
   CopyEvent,
   PasteEvent,
+  MultiPasteEvent,
+  MultiCopyEvent,
   SortDirection,
   SortColumn,
   ColSpanArgs,

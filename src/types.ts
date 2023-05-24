@@ -124,6 +124,7 @@ export interface CellRendererProps<TRow, TSummaryRow>
   onDoubleClick: RowRendererProps<TRow, TSummaryRow>['onCellDoubleClick'];
   onContextMenu: RowRendererProps<TRow, TSummaryRow>['onCellContextMenu'];
   onRowChange: (column: CalculatedColumn<TRow, TSummaryRow>, newRow: TRow) => void;
+  rangeSelectionMode: boolean;
 }
 
 export type CellEvent<E extends React.SyntheticEvent<HTMLDivElement>> = E & {
@@ -172,6 +173,7 @@ export interface RowRendererProps<TRow, TSummaryRow = unknown>
   row: TRow;
   rowIdx: number;
   selectedCellIdx: number | undefined;
+  selectedCellsRange: { startIdx: number, endIdx: number };
   copiedCellIdx: number | undefined;
   draggedOverCellIdx: number | undefined;
   lastFrozenColumnIndex: number;
@@ -180,11 +182,32 @@ export interface RowRendererProps<TRow, TSummaryRow = unknown>
   height: number;
   selectedCellEditor: ReactElement<EditorProps<TRow>> | undefined;
   selectedCellDragHandle: ReactElement<React.HTMLAttributes<HTMLDivElement>> | undefined;
+  rangeSelectionMode: boolean;
   onRowChange: (column: CalculatedColumn<TRow, TSummaryRow>, rowIdx: number, newRow: TRow) => void;
   rowClass: Maybe<(row: TRow, rowIdx: number) => Maybe<string>>;
   setDraggedOverRowIdx: ((overRowIdx: number) => void) | undefined;
   selectCell: (position: Position, enableEditor?: Maybe<boolean>) => void;
+  onCellMouseDown: Maybe<(row: TRow, column: CalculatedColumn<TRow, TSummaryRow>) => void>;
+  onCellMouseUp: Maybe<(row: TRow, column: CalculatedColumn<TRow, TSummaryRow>) => void>;
+  onCellMouseEnter: Maybe<(columnIdx: number) => void>;
 }
+
+export interface MultiPasteEvent {
+  copiedRange: CellsRange;
+  targetRange: CellsRange
+}
+
+export interface CellsRange {
+  startRowIdx: number
+  startColumnIdx: number
+  endRowIdx: number
+  endColumnIdx: number
+}
+
+export interface MultiCopyEvent {
+  cellsRange: CellsRange
+}
+
 
 export interface RowsChangeData<R, SR = unknown> {
   indexes: number[];

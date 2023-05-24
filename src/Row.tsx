@@ -6,6 +6,7 @@ import { getColSpan, getRowStyle } from './utils';
 import type { CalculatedColumn, RowRendererProps } from './types';
 import Cell from './Cell';
 import { rowClassname, rowSelectedClassname } from './style/row';
+import {isValueInBetween} from "./utils/Helpers";
 
 function Row<R, SR>(
   {
@@ -14,6 +15,7 @@ function Row<R, SR>(
     gridRowStart,
     height,
     selectedCellIdx,
+    selectedCellsRange,
     isRowSelected,
     copiedCellIdx,
     draggedOverCellIdx,
@@ -29,7 +31,11 @@ function Row<R, SR>(
     setDraggedOverRowIdx,
     onMouseEnter,
     onRowChange,
+    onCellMouseDown,
+    onCellMouseUp,
+    onCellMouseEnter,
     selectCell,
+    rangeSelectionMode,
     ...props
   }: RowRendererProps<R, SR>,
   ref: React.Ref<HTMLDivElement>
@@ -44,13 +50,21 @@ function Row<R, SR>(
   }
 
   className = clsx(
+    // rowClassname,
+    // `rdg-row-${rowIdx % 2 === 0 ? 'even' : 'odd'}`,
+    // {
+    //   [rowSelectedClassname]: selectedCellIdx === -1
+    // },
+    // rowClass?.(row, rowIdx),
+    // className
+
     rowClassname,
-    `rdg-row-${rowIdx % 2 === 0 ? 'even' : 'odd'}`,
-    {
-      [rowSelectedClassname]: selectedCellIdx === -1
-    },
-    rowClass?.(row, rowIdx),
-    className
+      `rdg-row-${rowIdx % 2 === 0 ? 'even' : 'odd'}`,
+      {
+        [rowSelectedClassname]: selectedCellIdx === -1
+      },
+      rowClass?.(row, rowIdx),
+      className
   );
 
   const cells = [];
@@ -63,7 +77,7 @@ function Row<R, SR>(
       index += colSpan - 1;
     }
 
-    const isCellSelected = selectedCellIdx === idx;
+    const isCellSelected = selectedCellIdx === idx || (rangeSelectionMode && isValueInBetween(idx, selectedCellsRange?.startIdx, selectedCellsRange?.endIdx));
 
     if (isCellSelected && selectedCellEditor) {
       cells.push(selectedCellEditor);
@@ -84,6 +98,11 @@ function Row<R, SR>(
           onContextMenu={onCellContextMenu}
           onRowChange={handleRowChange}
           selectCell={selectCell}
+        
+          onMouseDownCapture={() => onCellMouseDown?.(row, column)}
+          onMouseUpCapture={() => onCellMouseUp?.(row, column)}
+          onMouseEnter={() => onCellMouseEnter?.(column.idx)}
+          rangeSelectionMode={rangeSelectionMode}
         />
       );
     }

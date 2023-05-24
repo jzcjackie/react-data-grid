@@ -84,6 +84,9 @@ export default function Nav({ direction, onDirectionChange }: Props) {
       <NavLink to="/cell-navigation" end className={getActiveClassname}>
         Cell Navigation
       </NavLink>
+      <NavLink to="/range-selection" end className={getActiveClassname}>
+        Range Selection
+      </NavLink>
       <NavLink to="/column-spanning" end className={getActiveClassname}>
         Column Spanning
       </NavLink>
