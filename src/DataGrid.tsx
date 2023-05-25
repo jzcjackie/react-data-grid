@@ -64,7 +64,6 @@ import { checkboxFormatter as defaultCheckboxFormatter } from './formatters';
 import { default as defaultSortStatus } from './sortStatus';
 import { rootClassname, viewportDraggingClassname, focusSinkClassname } from './style/core';
 import { rowSelected, rowSelectedWithFrozenCell } from './style/row';
-import { isValueInBetween } from './utils/Helpers';
 
 export interface SelectCellState extends Position {
   readonly mode: 'SELECT';
@@ -1175,11 +1174,6 @@ function DataGrid<R, SR, K extends Key>(
               : undefined,
 
           selectedCellIdx: selectedRowIdx === rowIdx ? selectedIdx : undefined,
-
-          // selectedCellsRange:  enableRangeSelection && isValueInBetween(rowIdx, selectedRange?.startRowIdx, selectedRange?.endRowIdx) ? {
-          //   startIdx: selectedRange.startColumnIdx,
-          //   endIdx: selectedRange.endColumnIdx
-          // } : {startIdx: -1, endIdx: -1},
 
           selectedRange: selectedRange,
 
