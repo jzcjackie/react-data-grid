@@ -344,7 +344,6 @@ export default function RangeSelection({ direction }: Props) {
     const destinationStartRow = Math.min(destinationRange.startRowIdx, destinationRange.endRowIdx)
     const destinationStartCol = Math.min(destinationRange.startColumnIdx, destinationRange.endColumnIdx)
 
-    debugger
     for (let i=0; i<= getRangeSize(sourceRange.startRowIdx, sourceRange.endRowIdx); i++){
       for (let j=0; j <= getRangeSize(sourceRange.startColumnIdx, sourceRange.endColumnIdx); j++){
         const sourceColumnKey = columns[sourceStartCol + j].key
