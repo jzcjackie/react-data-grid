@@ -85,6 +85,10 @@ export default function EditCell<R, SR>({
     cancelAnimationFrame(frameRequestRef.current!);
   }
 
+  function handlePaste(event: React.ClipboardEvent<HTMLDivElement>){
+    console.log("data grid handlePaste", event.clipboardData.getData("text"))
+  }
+
   function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
     if (onKeyDown) {
       const cellEvent = createCellEvent(event);
@@ -147,6 +151,7 @@ export default function EditCell<R, SR>({
       className={className}
       style={getCellStyle(column, colSpan)}
       onKeyDown={handleKeyDown}
+      onPaste={handlePaste}
       onMouseDownCapture={cancelFrameRequest}
     >
       {column.editor != null && (

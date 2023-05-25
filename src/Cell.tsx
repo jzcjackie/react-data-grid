@@ -29,6 +29,10 @@ function Cell<R, SR>({
   column,
   colSpan,
   isCellSelected,
+  cellSelectRangeLeft,
+  cellSelectRangeRight,
+  cellSelectRangeTop,
+  cellSelectRangeBottom,
   isCopied,
   isDraggedOver,
   row,
@@ -103,6 +107,10 @@ function Cell<R, SR>({
       role="gridcell"
       aria-colindex={column.idx + 1} // aria-colindex is 1-based
       aria-selected={isCellSelected}
+      aria-selected-range-left={cellSelectRangeLeft}
+      aria-selected-range-right={cellSelectRangeRight}
+      aria-selected-range-top={cellSelectRangeTop}
+      aria-selected-range-bottom={cellSelectRangeBottom}
       aria-colspan={colSpan}
       aria-readonly={!isEditable || undefined}
       tabIndex={tabIndex}

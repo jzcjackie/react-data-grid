@@ -7,7 +7,7 @@ import DataGrid, {SelectColumn, textEditor, SelectCellFormatter} from '../../src
 import type { Column, SortColumn } from '../../src';
 import { textEditorClassname } from '../../src/editors/textEditor';
 import type { Props } from './types';
-import type {Direction, MultiPasteEvent} from '../../src/types';
+import type {Direction, FillEvent, MultiPasteEvent} from '../../src/types';
 
 const dialogContainerClassname = css`
   position: absolute;
@@ -356,6 +356,10 @@ export default function RangeSelection({ direction }: Props) {
     setRows(newRows)
   }
 
+  function handleFill({ columnKey, sourceRow, targetRow }: FillEvent<Row>): Row {
+    return { ...targetRow, [columnKey]: sourceRow[columnKey as keyof Row] };
+  }
+
   const gridElement = (
     <DataGrid
       rowKeyGetter={rowKeyGetter}
@@ -368,6 +372,7 @@ export default function RangeSelection({ direction }: Props) {
       selectedRows={selectedRows}
       onSelectedRowsChange={setSelectedRows}
       onRowsChange={setRows}
+      onFill={handleFill}
       sortColumns={sortColumns}
       onSortColumnsChange={setSortColumns}
       className="fill-grid"

@@ -15,7 +15,7 @@ function Row<R, SR>(
     gridRowStart,
     height,
     selectedCellIdx,
-    selectedCellsRange,
+    selectedRange,
     isRowSelected,
     copiedCellIdx,
     draggedOverCellIdx,
@@ -77,7 +77,26 @@ function Row<R, SR>(
       index += colSpan - 1;
     }
 
-    const isCellSelected = selectedCellIdx === idx || (rangeSelectionMode && isValueInBetween(idx, selectedCellsRange?.startIdx, selectedCellsRange?.endIdx));
+    let isCellSelected = selectedCellIdx === idx;
+
+    let isCellSeleectRangeLeft = false
+    let isCellSeleectRangeRight = false
+    let isCellSeleectRangeTop = false
+    let isCellSeleectRangeBottom = false
+
+    if(rangeSelectionMode && selectedRange && selectedRange.startRowIdx <= rowIdx && selectedRange.endRowIdx >= rowIdx && selectedRange.startColumnIdx <= idx && selectedRange.endColumnIdx >= idx){
+      isCellSeleectRangeLeft = (idx === selectedRange.startColumnIdx);
+      isCellSeleectRangeRight = (idx === selectedRange.endColumnIdx);
+      isCellSeleectRangeTop = (rowIdx === selectedRange.startRowIdx);
+      isCellSeleectRangeBottom = (rowIdx === selectedRange.endRowIdx);
+    }
+    if(isCellSelected && rangeSelectionMode && selectedRange){
+      if(isCellSeleectRangeLeft && isCellSeleectRangeRight && isCellSeleectRangeTop && isCellSeleectRangeBottom){
+
+      }else{
+        isCellSelected = false;
+      }
+    }
 
     if (isCellSelected && selectedCellEditor) {
       cells.push(selectedCellEditor);
@@ -92,6 +111,10 @@ function Row<R, SR>(
           isCopied={copiedCellIdx === idx}
           isDraggedOver={draggedOverCellIdx === idx}
           isCellSelected={isCellSelected}
+          cellSelectRangeLeft={isCellSeleectRangeLeft}
+          cellSelectRangeRight={isCellSeleectRangeRight}
+          cellSelectRangeTop={isCellSeleectRangeTop}
+          cellSelectRangeBottom={isCellSeleectRangeBottom}
           dragHandle={isCellSelected ? selectedCellDragHandle : undefined}
           onClick={onCellClick}
           onDoubleClick={onCellDoubleClick}

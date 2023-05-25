@@ -1176,10 +1176,12 @@ function DataGrid<R, SR, K extends Key>(
 
           selectedCellIdx: selectedRowIdx === rowIdx ? selectedIdx : undefined,
 
-          selectedCellsRange:  enableRangeSelection && isValueInBetween(rowIdx, selectedRange?.startRowIdx, selectedRange?.endRowIdx) ? {
-            startIdx: selectedRange.startColumnIdx,
-            endIdx: selectedRange.endColumnIdx
-          } : {startIdx: -1, endIdx: -1},
+          // selectedCellsRange:  enableRangeSelection && isValueInBetween(rowIdx, selectedRange?.startRowIdx, selectedRange?.endRowIdx) ? {
+          //   startIdx: selectedRange.startColumnIdx,
+          //   endIdx: selectedRange.endColumnIdx
+          // } : {startIdx: -1, endIdx: -1},
+
+          selectedRange: selectedRange,
 
           draggedOverCellIdx: getDraggedOverCellIdx(rowIdx),
           setDraggedOverRowIdx: isDragging ? setDraggedOverRowIdx : undefined,
