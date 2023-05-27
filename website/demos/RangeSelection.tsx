@@ -368,8 +368,6 @@ export default function RangeSelection({ direction }: Props) {
 
   const gridElement = (
     <DataGrid
-      
-    className='rdg-light'
       rowKeyGetter={rowKeyGetter}
       columns={columns}
       rows={sortedRows}
@@ -383,7 +381,7 @@ export default function RangeSelection({ direction }: Props) {
       onFill={handleFill}
       sortColumns={sortColumns}
       onSortColumnsChange={setSortColumns}
-      // className="fill-grid"
+      className="fill-grid"
       direction={direction}
       enableRangeSelection={true}
       onMultiPaste = {handleMultiPaste}
