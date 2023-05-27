@@ -24,6 +24,7 @@ export interface GroupRowRendererProps<R, SR>
   selectedCellIdx: number | undefined;
   isExpanded: boolean;
   isRowSelected: boolean;
+  gridRowFocus: string;
   selectGroup: (rowIdx: number) => void;
   toggleGroup: (expandedGroupId: unknown) => void;
 }
@@ -55,6 +56,7 @@ function GroupedRow<R, SR>({
   isExpanded,
   selectedCellIdx,
   isRowSelected,
+  gridRowFocus,
   selectGroup,
   toggleGroup,
   ...props
@@ -72,6 +74,7 @@ function GroupedRow<R, SR>({
         role="row"
         aria-level={level}
         aria-expanded={isExpanded}
+        grid-row-focus={gridRowFocus}
         className={clsx(
           rowClassname,
           groupRowClassname,

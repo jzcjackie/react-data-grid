@@ -84,6 +84,7 @@ function getColumns(countries: string[], direction: Direction): readonly Column<
       name: 'Task',
       width: 120,
       frozen: true,
+      editable: true,
       editor: textEditor,
       summaryFormatter({ row }) {
         return <>{row.totalCount} records</>;
@@ -93,18 +94,21 @@ function getColumns(countries: string[], direction: Direction): readonly Column<
       key: 'client',
       name: 'Client',
       width: 220,
+      editable: true,
       editor: textEditor
     },
     {
       key: 'area',
       name: 'Area',
       width: 120,
+      editable: true,
       editor: textEditor
     },
     {
       key: 'country',
       name: 'Country',
       width: 180,
+      editable: true,
       editor: (p) => (
         <select
           autoFocus
@@ -128,11 +132,13 @@ function getColumns(countries: string[], direction: Direction): readonly Column<
       key: 'assignee',
       name: 'Assignee',
       width: 150,
+      editable: true,
       editor: textEditor
     },
     {
       key: 'progress',
       name: 'Completion',
+      editable: true,
       width: 110,
       formatter(props) {
         const value = props.row.progress;
@@ -362,6 +368,8 @@ export default function RangeSelection({ direction }: Props) {
 
   const gridElement = (
     <DataGrid
+      
+    className='rdg-light'
       rowKeyGetter={rowKeyGetter}
       columns={columns}
       rows={sortedRows}
@@ -375,7 +383,7 @@ export default function RangeSelection({ direction }: Props) {
       onFill={handleFill}
       sortColumns={sortColumns}
       onSortColumnsChange={setSortColumns}
-      className="fill-grid"
+      // className="fill-grid"
       direction={direction}
       enableRangeSelection={true}
       onMultiPaste = {handleMultiPaste}

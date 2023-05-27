@@ -78,7 +78,7 @@ function SummaryRow<R, SR>({
   isTop,
   showBorder,
   selectCell,
-  'aria-rowindex': ariaRowIndex
+  'aria-rowindex': ariaRowIndex,
 }: SummaryRowProps<R, SR>) {
   const cells = [];
   for (let index = 0; index < viewportColumns.length; index++) {

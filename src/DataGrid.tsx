@@ -64,6 +64,8 @@ import { checkboxFormatter as defaultCheckboxFormatter } from './formatters';
 import { default as defaultSortStatus } from './sortStatus';
 import { rootClassname, viewportDraggingClassname, focusSinkClassname } from './style/core';
 import { rowSelected, rowSelectedWithFrozenCell } from './style/row';
+import { copyDataToClipboard, pasteDataFromFocusedCell, pasteDataIntoSelectRange, pasteFromClipboard } from './utils/clipboardUtils';
+import { getDataAsCsv } from './utils/stringUtils';
 
 export interface SelectCellState extends Position {
   readonly mode: 'SELECT';
@@ -301,7 +303,7 @@ function DataGrid<R, SR, K extends Key>(
   const [draggedOverRowIdx, setOverRowIdx] = useState<number | undefined>(undefined);
 
   const [selectedRange, setSelectedRange] = useState<CellsRange>(initialSelectedRange);
-  const [copiedRange, setCopiedRange] = useState<CellsRange | null>(null);
+  // const [copiedRange, setCopiedRange] = useState<CellsRange | null>(null);
   const [isMouseRangeSelectionMode, setIsMouseRangeSelectionMode] = useState<boolean>(false);
 
   /**
@@ -713,48 +715,94 @@ function DataGrid<R, SR, K extends Key>(
   }
 
   function handleCopy() {
+    // if(enableRangeSelection){
+    //   setCopiedRange(selectedRange)
+    //   onMultiCopy?.({cellsRange: selectedRange})
+    // }else{
+    //   const { idx, rowIdx } = selectedPosition;
+    //   const sourceRow = rawRows[getRawRowIdx(rowIdx)];
+    //   const sourceColumnKey = columns[idx].key;
+    //   setCopiedCell({ row: sourceRow, columnKey: sourceColumnKey });
+    //   onCopy?.({ sourceRow, sourceColumnKey });
+    // }
+
+    let copyValueData : string;
     if(enableRangeSelection){
-      setCopiedRange(selectedRange)
-      onMultiCopy?.({cellsRange: selectedRange})
+
+      copyValueData = getDataAsCsv(selectedRange, columns, rawRows);
+
     }else{
       const { idx, rowIdx } = selectedPosition;
-      const sourceRow = rawRows[getRawRowIdx(rowIdx)];
+      const sourceRow = rawRows[getRawRowIdx(rowIdx)] as any;
       const sourceColumnKey = columns[idx].key;
-      setCopiedCell({ row: sourceRow, columnKey: sourceColumnKey });
-      onCopy?.({ sourceRow, sourceColumnKey });
+      const column = columns[idx];
+      copyValueData = column && column.valueGetter != null ? column.valueGetter(sourceRow[sourceColumnKey]) : sourceRow[sourceColumnKey];
+    }
+
+    if(copyValueData){
+      copyDataToClipboard(copyValueData, document, gridRef.current)
     }
   }
 
   function handlePaste() {
 
-    if (enableRangeSelection) {
-      if (!onMultiPaste || !onRowsChange || copiedRange === null) {
-        return;
+    pasteFromClipboard((pasteData: string[][]) => {
+      console.log("paste data:", pasteData)
+
+      if (enableRangeSelection && selectedRange && (selectedRange.startColumnIdx != selectedRange.endColumnIdx || selectedRange.startRowIdx != selectedRange.endRowIdx)) {
+
+        pasteDataIntoSelectRange(selectedRange, rawRows, columns, pasteData)
+        setSelectedRange({
+          startColumnIdx: selectedRange.startColumnIdx,
+          startRowIdx: selectedRange.startRowIdx,
+          endColumnIdx: selectedRange.endColumnIdx,
+          endRowIdx: selectedRange.endRowIdx,
+        })
+      }else{
+
+        pasteDataFromFocusedCell(selectedPosition, rawRows, columns, pasteData, getRawRowIdx)
+
+        const { idx, rowIdx } = selectedPosition;
+        setSelectedRange({
+          startColumnIdx: idx,
+          startRowIdx: rowIdx,
+          endColumnIdx: idx + pasteData[0].length - 1,
+          endRowIdx: rowIdx + pasteData.length - 1
+        })
       }
 
-      onMultiPaste({
-        copiedRange,
-        targetRange: selectedRange
-      })
-    } else {
+      
 
-      if (!onPaste || !onRowsChange || copiedCell === null || !isCellEditable(selectedPosition)) {
-        return;
-      }
+  }, document, gridRef.current)
+
+    // if (enableRangeSelection) {
+    //   if (!onMultiPaste || !onRowsChange || copiedRange === null) {
+    //     return;
+    //   }
+
+    //   onMultiPaste({
+    //     copiedRange,
+    //     targetRange: selectedRange
+    //   })
+    // } else {
+
+    //   if (!onPaste || !onRowsChange || copiedCell === null || !isCellEditable(selectedPosition)) {
+    //     return;
+    //   }
   
-      const { idx, rowIdx } = selectedPosition;
-      const targetColumn = columns[idx];
-      const targetRow = rawRows[getRawRowIdx(rowIdx)];
+    //   const { idx, rowIdx } = selectedPosition;
+    //   const targetColumn = columns[idx];
+    //   const targetRow = rawRows[getRawRowIdx(rowIdx)];
   
-      const updatedTargetRow = onPaste({
-        sourceRow: copiedCell.row,
-        sourceColumnKey: copiedCell.columnKey,
-        targetRow,
-        targetColumnKey: targetColumn.key
-      });
+    //   const updatedTargetRow = onPaste({
+    //     sourceRow: copiedCell.row,
+    //     sourceColumnKey: copiedCell.columnKey,
+    //     targetRow,
+    //     targetColumnKey: targetColumn.key
+    //   });
   
-      updateRow(targetColumn, rowIdx, updatedTargetRow);
-    }
+    //   updateRow(targetColumn, rowIdx, updatedTargetRow);
+    // }
   }
 
   function handleCellInput(event: KeyboardEvent<HTMLDivElement>) {
@@ -1116,6 +1164,7 @@ function DataGrid<R, SR, K extends Key>(
         ({ startRowIndex } = row);
         const isGroupRowSelected =
           isSelectable && row.childRows.every((cr) => selectedRows.has(rowKeyGetter!(cr)));
+          debugger;
         rowElements.push(
           <GroupRowRenderer
             aria-level={row.level + 1} // aria-level is 1-based
@@ -1123,6 +1172,7 @@ function DataGrid<R, SR, K extends Key>(
             aria-posinset={row.posInSet + 1} // aria-posinset is 1-based
             aria-rowindex={headerAndTopSummaryRowsCount + startRowIndex + 1} // aria-rowindex is 1 based
             aria-selected={isSelectable ? isGroupRowSelected : undefined}
+            gridRowFocus={(selectedRowIdx === rowIdx).toString()}
             key={row.id}
             id={row.id}
             groupKey={row.groupKey}
@@ -1158,6 +1208,7 @@ function DataGrid<R, SR, K extends Key>(
           // aria-rowindex is 1 based
           'aria-rowindex': headerAndTopSummaryRowsCount + (hasGroups ? startRowIndex : rowIdx) + 1,
           'aria-selected': isSelectable ? isRowSelected : undefined,
+          gridRowFocus: (selectedRowIdx === rowIdx).toString(),
           rowIdx,
           row,
           viewportColumns: rowColumns,

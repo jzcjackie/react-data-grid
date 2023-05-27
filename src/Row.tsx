@@ -21,6 +21,7 @@ function Row<R, SR>(
     lastFrozenColumnIndex,
     row,
     viewportColumns,
+    gridRowFocus,
     selectedCellEditor,
     selectedCellDragHandle,
     onCellClick,
@@ -135,6 +136,7 @@ function Row<R, SR>(
       <div
         role="row"
         ref={ref}
+        grid-row-focus={gridRowFocus}
         className={className}
         onMouseEnter={handleDragEnter}
         style={getRowStyle(gridRowStart, height)}

@@ -49,6 +49,7 @@ export interface Column<TRow, TSummaryRow = unknown> {
   }>;
   /** Header renderer for each header cell */
   readonly headerRenderer?: Maybe<(props: HeaderRendererProps<TRow, TSummaryRow>) => ReactNode>;
+  readonly valueGetter?:Maybe<(cellValue : any) => string>;
 }
 
 export interface CalculatedColumn<TRow, TSummaryRow = unknown> extends Column<TRow, TSummaryRow> {
@@ -174,6 +175,7 @@ export interface RowRendererProps<TRow, TSummaryRow = unknown>
       'onCellClick' | 'onCellDoubleClick' | 'onCellContextMenu'
     > {
   viewportColumns: readonly CalculatedColumn<TRow, TSummaryRow>[];
+  gridRowFocus: string,
   row: TRow;
   rowIdx: number;
   selectedCellIdx: number | undefined;

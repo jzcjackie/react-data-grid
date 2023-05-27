@@ -17,6 +17,14 @@ export const row = css`
         background-color: var(--rdg-row-selected-hover-background-color);
       }
     }
+
+    &[grid-row-focus='true'] {
+      background-color: var(--rdg-row-active-background-color);
+
+      &:hover {
+        background-color: var(--rdg-row-active-hover-background-color);
+      }
+    }
   }
 `;
 
