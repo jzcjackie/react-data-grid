@@ -14,13 +14,16 @@ function Row<R, SR>(
     gridRowStart,
     height,
     selectedCellIdx,
+    selectedRange,
     isRowSelected,
     copiedCellIdx,
     draggedOverCellIdx,
     lastFrozenColumnIndex,
     row,
     viewportColumns,
+    gridRowFocus,
     selectedCellEditor,
+    selectedCellDragHandle,
     onCellClick,
     onCellDoubleClick,
     onCellContextMenu,
@@ -28,7 +31,11 @@ function Row<R, SR>(
     setDraggedOverRowIdx,
     onMouseEnter,
     onRowChange,
+    onCellMouseDown,
+    onCellMouseUp,
+    onCellMouseEnter,
     selectCell,
+    rangeSelectionMode,
     ...props
   }: RenderRowProps<R, SR>,
   ref: React.Ref<HTMLDivElement>
@@ -45,9 +52,9 @@ function Row<R, SR>(
   className = clsx(
     rowClassname,
     `rdg-row-${rowIdx % 2 === 0 ? 'even' : 'odd'}`,
-    {
-      [rowSelectedClassname]: selectedCellIdx === -1
-    },
+      {
+        [rowSelectedClassname]: selectedCellIdx === -1
+      },
     rowClass?.(row, rowIdx),
     className
   );
@@ -62,7 +69,26 @@ function Row<R, SR>(
       index += colSpan - 1;
     }
 
-    const isCellSelected = selectedCellIdx === idx;
+    let isCellSelected = selectedCellIdx === idx;
+
+    let isCellSeleectRangeLeft = false
+    let isCellSeleectRangeRight = false
+    let isCellSeleectRangeTop = false
+    let isCellSeleectRangeBottom = false
+
+    if(rangeSelectionMode && selectedRange && selectedRange.startRowIdx <= rowIdx && selectedRange.endRowIdx >= rowIdx && selectedRange.startColumnIdx <= idx && selectedRange.endColumnIdx >= idx){
+      isCellSeleectRangeLeft = (idx === selectedRange.startColumnIdx);
+      isCellSeleectRangeRight = (idx === selectedRange.endColumnIdx);
+      isCellSeleectRangeTop = (rowIdx === selectedRange.startRowIdx);
+      isCellSeleectRangeBottom = (rowIdx === selectedRange.endRowIdx);
+    }
+    if(isCellSelected && rangeSelectionMode && selectedRange){
+      if(isCellSeleectRangeLeft && isCellSeleectRangeRight && isCellSeleectRangeTop && isCellSeleectRangeBottom){
+
+      }else{
+        isCellSelected = false;
+      }
+    }
 
     if (isCellSelected && selectedCellEditor) {
       cells.push(selectedCellEditor);
@@ -77,11 +103,20 @@ function Row<R, SR>(
           isCopied={copiedCellIdx === idx}
           isDraggedOver={draggedOverCellIdx === idx}
           isCellSelected={isCellSelected}
+          cellSelectRangeLeft={isCellSeleectRangeLeft}
+          cellSelectRangeRight={isCellSeleectRangeRight}
+          cellSelectRangeTop={isCellSeleectRangeTop}
+          cellSelectRangeBottom={isCellSeleectRangeBottom}
+          dragHandle={isCellSelected && (column.editable || column.editor) ? selectedCellDragHandle : undefined}
           onClick={onCellClick}
           onDoubleClick={onCellDoubleClick}
           onContextMenu={onCellContextMenu}
           onRowChange={handleRowChange}
           selectCell={selectCell}
+          onMouseDownCapture={() => onCellMouseDown?.(row, column)}
+          onMouseUpCapture={() => onCellMouseUp?.(row, column)}
+          onMouseEnter={() => onCellMouseEnter?.(column.idx)}
+          rangeSelectionMode={rangeSelectionMode}
         />
       );
     }
@@ -92,6 +127,7 @@ function Row<R, SR>(
       <div
         role="row"
         ref={ref}
+        grid-row-focus={gridRowFocus}
         className={className}
         onMouseEnter={handleDragEnter}
         style={getRowStyle(gridRowStart, height)}

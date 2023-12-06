@@ -10,8 +10,11 @@ const lightTheme = `
   --rdg-header-background-color: hsl(0deg 0% 97.5%);
   --rdg-header-draggable-background-color: hsl(0deg 0% 90.5%);
   --rdg-row-hover-background-color: hsl(0deg 0% 96%);
-  --rdg-row-selected-background-color: hsl(207deg 76% 92%);
-  --rdg-row-selected-hover-background-color: hsl(207deg 76% 88%);
+
+  --rdg-row-selected-background-color: #cce9ff;
+  --rdg-row-selected-hover-background-color: #a6d7ff;
+  --rdg-row-active-background-color:#cce9ff;
+  --rdg-row-active-hover-background-color: #a6d7ff;
 
   --rdg-checkbox-color: hsl(207deg 100% 29%);
   --rdg-checkbox-focus-color: hsl(207deg 100% 69%);
@@ -34,6 +37,8 @@ const darkTheme = `
   --rdg-checkbox-focus-color: hsl(207deg 100% 89%);
   --rdg-checkbox-disabled-border-color: #000;
   --rdg-checkbox-disabled-background-color: #333;
+  --rdg-row-active-background-color: hsl(0deg 0% 40%);
+  --rdg-row-active-hover-background-color: hsl(207deg 76% 38%);
 `;
 
 const root = css`

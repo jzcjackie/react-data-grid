@@ -28,6 +28,7 @@ interface GroupRowRendererProps<R, SR> extends BaseRenderRowProps<R, SR> {
   row: GroupRow<R>;
   groupBy: readonly string[];
   toggleGroup: (expandedGroupId: unknown) => void;
+  gridRowFocus: string;
 }
 
 function GroupedRow<R, SR>({
@@ -37,6 +38,7 @@ function GroupedRow<R, SR>({
   viewportColumns,
   selectedCellIdx,
   isRowSelected,
+  gridRowFocus,
   selectCell,
   gridRowStart,
   height,
@@ -59,6 +61,7 @@ function GroupedRow<R, SR>({
         aria-setsize={row.setSize}
         aria-posinset={row.posInSet + 1} // aria-posinset is 1-based
         aria-expanded={row.isExpanded}
+        grid-row-focus={gridRowFocus}
         className={clsx(
           rowClassname,
           groupRowClassname,

@@ -29,15 +29,21 @@ function Cell<R, SR>({
   column,
   colSpan,
   isCellSelected,
+  cellSelectRangeLeft,
+  cellSelectRangeRight,
+  cellSelectRangeTop,
+  cellSelectRangeBottom,
   isCopied,
   isDraggedOver,
   row,
   rowIdx,
+  dragHandle,
   onClick,
   onDoubleClick,
   onContextMenu,
   onRowChange,
   selectCell,
+  rangeSelectionMode,
   ...props
 }: CellRendererProps<R, SR>) {
   const { tabIndex, childTabIndex, onFocus } = useRovingTabIndex(isCellSelected);
@@ -58,10 +64,12 @@ function Cell<R, SR>({
   }
 
   function handleClick(event: React.MouseEvent<HTMLDivElement>) {
-    if (onClick) {
-      const cellEvent = createCellEvent(event);
-      onClick({ row, column, selectCell: selectCellWrapper }, cellEvent);
-      if (cellEvent.isGridDefaultPrevented()) return;
+    if(!rangeSelectionMode){
+      if (onClick) {
+        const cellEvent = createCellEvent(event);
+        onClick({ row, column, selectCell: selectCellWrapper }, cellEvent);
+        if (cellEvent.isGridDefaultPrevented()) return;
+      }
     }
     selectCellWrapper();
   }
@@ -88,12 +96,25 @@ function Cell<R, SR>({
     onRowChange(column, newRow);
   }
 
+  function onMouseDown(event: React.MouseEvent<HTMLDivElement>){
+    if(rangeSelectionMode){
+      selectCellWrapper(false);
+      const cellEvent = createCellEvent(event);
+      onClick && onClick({row, column, selectCell: selectCellWrapper}, cellEvent);
+      if (cellEvent.isGridDefaultPrevented()) return;
+    }
+  }
+
   return (
     <div
       role="gridcell"
       aria-colindex={column.idx + 1} // aria-colindex is 1-based
       aria-colspan={colSpan}
       aria-selected={isCellSelected}
+      aria-selected-range-left={cellSelectRangeLeft}
+      aria-selected-range-right={cellSelectRangeRight}
+      aria-selected-range-top={cellSelectRangeTop}
+      aria-selected-range-bottom={cellSelectRangeBottom}
       aria-readonly={!isEditable || undefined}
       tabIndex={tabIndex}
       className={className}
@@ -101,6 +122,7 @@ function Cell<R, SR>({
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
+      onMouseDown={onMouseDown}
       onFocus={onFocus}
       {...props}
     >
@@ -112,6 +134,7 @@ function Cell<R, SR>({
         tabIndex: childTabIndex,
         onRowChange: handleRowChange
       })}
+      {dragHandle}
     </div>
   );
 }

@@ -20,10 +20,31 @@ export const cell = css`
     overflow: clip;
     text-overflow: ellipsis;
     outline: none;
+    user-select:none;
 
     &[aria-selected='true'] {
-      outline: 2px solid var(--rdg-selection-color);
-      outline-offset: -2px;
+      outline: 1px solid var(--rdg-selection-color);
+      outline-offset: -1px;
+    }
+    &[aria-selected-range-left='true'] {
+      border-left-color: var(--rdg-selection-color);
+      border-left-style: solid;
+      border-left-width: thin;
+    }
+    &[aria-selected-range-right='true'] {
+      border-right-color: var(--rdg-selection-color);
+      border-right-style: solid;
+      border-right-width: thin;
+    }
+    &[aria-selected-range-top='true'] {
+      border-top-color: var(--rdg-selection-color);
+      border-top-style: solid;
+      border-top-width: thin;
+    }
+    &[aria-selected-range-bottom='true'] {
+      border-bottom-color: var(--rdg-selection-color);
+      border-bottom-style: solid;
+      border-bottom-width: thin;
     }
   }
 `;

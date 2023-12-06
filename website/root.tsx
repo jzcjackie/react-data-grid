@@ -26,6 +26,7 @@ import RowsReordering from './demos/RowsReordering';
 import ScrollToCell from './demos/ScrollToCell';
 import TreeView from './demos/TreeView';
 import VariableRowHeight from './demos/VariableRowHeight';
+import RangeSelection from "./demos/RangeSelection";
 import Nav from './Nav';
 
 const mainClassname = css`
@@ -51,6 +52,7 @@ function Root() {
           <Route path="column-spanning" element={<ColumnSpanning direction={direction} />} />
           <Route path="column-grouping" element={<ColumnGrouping direction={direction} />} />
           <Route path="columns-reordering" element={<ColumnsReordering direction={direction} />} />
+          <Route path="range-selection" element={<RangeSelection direction={direction} />} />
           <Route path="context-menu" element={<ContextMenuDemo direction={direction} />} />
           <Route
             path="customizable-renderers"

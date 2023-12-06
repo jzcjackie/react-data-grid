@@ -93,6 +93,9 @@ export default function Nav({ direction, onDirectionChange }: Props) {
       <NavLink to="/columns-reordering" end className={getActiveClassname}>
         Columns Reordering
       </NavLink>
+      <NavLink to="/range-selection" end className={getActiveClassname}>
+        Range Selection
+      </NavLink>
       <NavLink to="/context-menu" end className={getActiveClassname}>
         Context Menu
       </NavLink>
