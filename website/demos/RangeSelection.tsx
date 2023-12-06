@@ -75,7 +75,7 @@ function getColumns(countries: string[], direction: Direction): readonly Column<
       width: 60,
       frozen: true,
       resizable: false,
-      summaryFormatter() {
+      renderSummaryCell() {
         return <strong>Total</strong>;
       }
     },
@@ -85,8 +85,8 @@ function getColumns(countries: string[], direction: Direction): readonly Column<
       width: 120,
       frozen: true,
       editable: true,
-      editor: textEditor,
-      summaryFormatter({ row }) {
+      renderEditCell: textEditor,
+      renderSummaryCell({ row }) {
         return <>{row.totalCount} records</>;
       }
     },
@@ -95,21 +95,21 @@ function getColumns(countries: string[], direction: Direction): readonly Column<
       name: 'Client',
       width: 220,
       editable: true,
-      editor: textEditor
+      renderEditCell: textEditor
     },
     {
       key: 'area',
       name: 'Area',
       width: 120,
       editable: true,
-      editor: textEditor
+      renderEditCell: textEditor
     },
     {
       key: 'country',
       name: 'Country',
       width: 180,
       editable: true,
-      editor: (p) => (
+      renderEditCell: (p) => (
         <select
           autoFocus
           className={textEditorClassname}
@@ -126,21 +126,21 @@ function getColumns(countries: string[], direction: Direction): readonly Column<
       key: 'contact',
       name: 'Contact',
       width: 160,
-      editor: textEditor
+      renderEditCell: textEditor
     },
     {
       key: 'assignee',
       name: 'Assignee',
       width: 150,
       editable: true,
-      editor: textEditor
+      renderEditCell: textEditor
     },
     {
       key: 'progress',
       name: 'Completion',
       editable: true,
       width: 110,
-      formatter(props) {
+      renderCell(props) {
         const value = props.row.progress;
         return (
           <>
@@ -148,7 +148,7 @@ function getColumns(countries: string[], direction: Direction): readonly Column<
           </>
         );
       },
-      editor({ row, onRowChange, onClose }) {
+      renderEditCell: ({ row, onRowChange, onClose }) => {
         return createPortal(
           <div
             dir={direction}
@@ -178,14 +178,14 @@ function getColumns(countries: string[], direction: Direction): readonly Column<
         );
       },
       editorOptions: {
-        renderFormatter: true
+        displayCellContent: true
       }
     },
     {
       key: 'startTimestamp',
       name: 'Start date',
       width: 100,
-      formatter(props) {
+      renderCell(props) {
         return <TimestampFormatter timestamp={props.row.startTimestamp} />;
       }
     },
@@ -193,7 +193,7 @@ function getColumns(countries: string[], direction: Direction): readonly Column<
       key: 'endTimestamp',
       name: 'Deadline',
       width: 100,
-      formatter(props) {
+      renderCell(props) {
         return <TimestampFormatter timestamp={props.row.endTimestamp} />;
       }
     },
@@ -201,7 +201,7 @@ function getColumns(countries: string[], direction: Direction): readonly Column<
       key: 'budget',
       name: 'Budget',
       width: 100,
-      formatter(props) {
+      renderCell(props) {
         return <CurrencyFormatter value={props.row.budget} />;
       }
     },
@@ -217,24 +217,23 @@ function getColumns(countries: string[], direction: Direction): readonly Column<
     {
       key: 'version',
       name: 'Version',
-      editor: textEditor
+      renderEditCell: textEditor
     },
     {
       key: 'available',
       name: 'Available',
       width: 80,
-      formatter({ row, onRowChange, isCellSelected }) {
+      renderCell({ row, onRowChange }) {
         return (
           <SelectCellFormatter
             value={row.available}
             onChange={() => {
               onRowChange({ ...row, available: !row.available });
             }}
-            isCellSelected={isCellSelected}
           />
         );
       },
-      summaryFormatter({ row: { yesCount, totalCount } }) {
+      renderSummaryCell({ row: { yesCount, totalCount } }) {
         return <>{`${Math.floor((100 * yesCount) / totalCount)}% ✔️`}</>;
       }
     }

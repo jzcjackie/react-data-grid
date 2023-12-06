@@ -154,7 +154,7 @@ export function pasteDataFromFocusedCell<R, SR>(selectedPosition: any , rawRows 
             return
           }
           const targetColumn = columns[idx + col];
-          if(!targetColumn.editable && !targetColumn.editor){
+          if(!targetColumn.editable && !targetColumn.renderEditCell){
             // 非编辑列不可粘贴
             return
         }
@@ -180,7 +180,7 @@ export function pasteDataIntoSelectRange<R, SR>(cellRange: CellsRange, rawRows :
                 dataColIdx = 0;
             }
             const targetColumn = columns[colIdx];
-            if(!targetColumn.editable && !targetColumn.editor){
+            if(!targetColumn.editable && !targetColumn.renderEditCell){
                 // 非编辑列不可粘贴
                 return
             }

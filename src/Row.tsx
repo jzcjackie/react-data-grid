@@ -23,7 +23,6 @@ function Row<R, SR>(
     viewportColumns,
     gridRowFocus,
     selectedCellEditor,
-    selectedCellDragHandle,
     onCellClick,
     onCellDoubleClick,
     onCellContextMenu,
@@ -107,7 +106,6 @@ function Row<R, SR>(
           cellSelectRangeRight={isCellSeleectRangeRight}
           cellSelectRangeTop={isCellSeleectRangeTop}
           cellSelectRangeBottom={isCellSeleectRangeBottom}
-          dragHandle={isCellSelected && (column.editable || column.editor) ? selectedCellDragHandle : undefined}
           onClick={onCellClick}
           onDoubleClick={onCellDoubleClick}
           onContextMenu={onCellContextMenu}

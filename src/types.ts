@@ -157,7 +157,6 @@ export interface CellRendererProps<TRow, TSummaryRow>
   cellSelectRangeRight: boolean;
   cellSelectRangeTop: boolean;
   cellSelectRangeBottom: boolean;
-  dragHandle: ReactElement<React.HTMLAttributes<HTMLDivElement>> | undefined;
   onClick: RenderRowProps<TRow, TSummaryRow>['onCellClick'];
   onDoubleClick: RenderRowProps<TRow, TSummaryRow>['onCellDoubleClick'];
   onContextMenu: RenderRowProps<TRow, TSummaryRow>['onCellContextMenu'];

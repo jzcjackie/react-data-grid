@@ -37,7 +37,6 @@ function Cell<R, SR>({
   isDraggedOver,
   row,
   rowIdx,
-  dragHandle,
   onClick,
   onDoubleClick,
   onContextMenu,
@@ -134,7 +133,6 @@ function Cell<R, SR>({
         tabIndex: childTabIndex,
         onRowChange: handleRowChange
       })}
-      {dragHandle}
     </div>
   );
 }
