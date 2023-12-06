@@ -64,11 +64,14 @@ function Cell<R, SR>({
   }
 
   function handleClick(event: React.MouseEvent<HTMLDivElement>) {
-    if (onClick) {
-      const cellEvent = createCellEvent(event);
-      onClick({ row, column, selectCell: selectCellWrapper }, cellEvent);
-      if (cellEvent.isGridDefaultPrevented()) return;
+    if(!rangeSelectionMode){
+      if (onClick) {
+        const cellEvent = createCellEvent(event);
+        onClick({ row, column, selectCell: selectCellWrapper }, cellEvent);
+        if (cellEvent.isGridDefaultPrevented()) return;
+      }
     }
+    
     selectCellWrapper();
   }
 
@@ -99,6 +102,7 @@ function Cell<R, SR>({
       selectCellWrapper(false);
       const cellEvent = createCellEvent(event);
       onClick && onClick({row, column, selectCell: selectCellWrapper}, cellEvent);
+      if (cellEvent.isGridDefaultPrevented()) return;
     }
   }
 

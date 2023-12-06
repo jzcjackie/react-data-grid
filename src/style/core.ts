@@ -9,10 +9,10 @@ const lightTheme = `
   --rdg-background-color: hsl(0deg 0% 100%);
   --rdg-header-background-color: hsl(0deg 0% 97.5%);
   --rdg-row-hover-background-color: hsl(0deg 0% 96%);
-  --rdg-row-selected-background-color: hsl(207deg 76% 92%);
-  --rdg-row-selected-hover-background-color: hsl(207deg 76% 88%);
-  --rdg-row-active-background-color:#f0f0f0;
-  --rdg-row-active-hover-background-color: #e7e7e7;
+  --rdg-row-selected-background-color: #cce9ff;
+  --rdg-row-selected-hover-background-color: #a6d7ff;
+  --rdg-row-active-background-color:#cce9ff;
+  --rdg-row-active-hover-background-color: #a6d7ff;
 
   --rdg-checkbox-color: hsl(207deg 100% 29%);
   --rdg-checkbox-focus-color: hsl(207deg 100% 69%);

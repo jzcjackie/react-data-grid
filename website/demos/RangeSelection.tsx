@@ -381,10 +381,17 @@ export default function RangeSelection({ direction }: Props) {
       onFill={handleFill}
       sortColumns={sortColumns}
       onSortColumnsChange={setSortColumns}
-      className="fill-grid"
+      className="rdg-light"
       direction={direction}
       enableRangeSelection={true}
       onMultiPaste = {handleMultiPaste}
+      onCellClick={(args, event) => {
+        console.log("oncell click", args.row)
+        if (args.column.key === 'title') {
+          event.preventGridDefault();
+          args.selectCell(true);
+        }
+      }}
     />
   );
 

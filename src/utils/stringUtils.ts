@@ -85,7 +85,7 @@ export function getDataAsCsv<R, SR>(cellRange: CellsRange, columns : readonly Co
         let row = rawRows[rowIdx] as any
         for(let colIdx = cellRange.startColumnIdx; colIdx <= cellRange.endColumnIdx; colIdx++){
             let column = columns[colIdx]
-            csvValue += column && column.valueGetter != null ? column.valueGetter(row[column.key as R]) : row[column.key]
+            csvValue += column && column.valueGetter != null ? column.valueGetter(row[column.key as R]) || '' : row[column.key]
             if(colIdx != cellRange.endColumnIdx){
                 csvValue += delimiter
             }

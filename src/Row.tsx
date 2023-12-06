@@ -115,7 +115,7 @@ function Row<R, SR>(
           cellSelectRangeRight={isCellSeleectRangeRight}
           cellSelectRangeTop={isCellSeleectRangeTop}
           cellSelectRangeBottom={isCellSeleectRangeBottom}
-          dragHandle={isCellSelected ? selectedCellDragHandle : undefined}
+          dragHandle={isCellSelected && (column.editable || column.editor) ? selectedCellDragHandle : undefined}
           onClick={onCellClick}
           onDoubleClick={onCellDoubleClick}
           onContextMenu={onCellContextMenu}

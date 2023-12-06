@@ -736,7 +736,7 @@ function DataGrid<R, SR, K extends Key>(
       const sourceRow = rawRows[getRawRowIdx(rowIdx)] as any;
       const sourceColumnKey = columns[idx].key;
       const column = columns[idx];
-      copyValueData = column && column.valueGetter != null ? column.valueGetter(sourceRow[sourceColumnKey]) : sourceRow[sourceColumnKey];
+      copyValueData = column && column.valueGetter != null ? column.valueGetter(sourceRow[sourceColumnKey]) || '' : sourceRow[sourceColumnKey];
     }
 
     if(copyValueData){
