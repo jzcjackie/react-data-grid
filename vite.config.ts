@@ -90,9 +90,7 @@ export default defineConfig(
           routesDirectory: 'website/routes',
           autoCodeSplitting: true
         }),
-      react({
-        exclude: ['./.cache/**/*', './node_modules/**/*', './website/routeTree.gen.ts']
-      })
+      react()
     ],
     server: {
       open: true
@@ -142,6 +140,7 @@ export default defineConfig(
               instances: getInstances(),
               viewport,
               headless: true,
+              ui: false,
               screenshotFailures: false
             },
             setupFiles: ['test/setupBrowser.ts', 'test/failOnConsole.ts']
